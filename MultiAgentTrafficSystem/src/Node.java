@@ -1,18 +1,76 @@
-import java.awt.Graphics;
+import java.awt.*;
+import java.util.ArrayList;
 
-public class Node 
+public class Node extends Drawable
 {
-	public int x;
-	public int y;
+	protected int nodeRadius = 50;
 	
-	public Node(int _x, int _y)
+	protected int maxVehicles;
+	protected int currentVehicles;
+	protected int trafficScore;
+	
+	protected String drawString;
+	
+	protected ArrayList<Edge> edges = new ArrayList<Edge>();
+	
+	public Node(int _maxVehicles, int _x, int _y)
 	{
-		this.x = _x;
-		this.y = _y;
+		super(_x, _y);
+		this.maxVehicles = _maxVehicles;
+	}
+	
+	public void Update()
+	{
+		
 	}
 	
 	public void Draw(Graphics _g)
 	{
-		_g.drawOval(x, y, 50, 50);
+		_g.setColor(colour);
+		
+		_g.fillOval(X, Y, nodeRadius, nodeRadius);
+		
+		drawString = drawString.valueOf(currentVehicles) + "/" + drawString.valueOf(maxVehicles);
+		_g.drawString(drawString, X + ((nodeRadius / 2) - 10), Y + (nodeRadius + 10));
+	}
+	
+	public void AddVehicle()
+	{
+		this.currentVehicles++;
+	}
+	
+	public void RemoveVehicle()
+	{
+		this.currentVehicles--;
+	}
+	
+	public boolean HasCapacity()
+	{
+		if (this.currentVehicles < this.maxVehicles)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public int GetRadius()
+	{
+		return this.nodeRadius;
+	}
+	
+	public int GetCurrentVehicles()
+	{
+		return this.currentVehicles;
+	}
+	
+	public int GetMaxVehicles()
+	{
+		return this.maxVehicles;
+	}
+	
+	public void SetMaxVehicles(int _max)
+	{
+		this.maxVehicles = _max;
 	}
 }
