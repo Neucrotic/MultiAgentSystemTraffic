@@ -19,11 +19,6 @@ public class Node extends Drawable
 		this.maxVehicles = _maxVehicles;
 	}
 	
-	public void Update()
-	{
-		
-	}
-	
 	public void Draw(Graphics _g)
 	{
 		_g.setColor(colour);

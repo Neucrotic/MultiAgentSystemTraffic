@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
+import java.util.Scanner;
 
 public class Network extends JFrame
 {
@@ -26,8 +26,10 @@ public class Network extends JFrame
 		MergeLists();
 	}
 	
-	public void paint(Graphics _g)
+	public void paintComponent(Graphics _g)
 	{
+		//super.paintComponent(_g);
+		
 		for (Drawable d: drawables)
 		{
 			d.Draw(_g);
@@ -36,15 +38,17 @@ public class Network extends JFrame
 	
 	public void Update()
 	{
-		for (Node n: nodes)
+		for (Drawable d: drawables)
 		{
-			n.Update();
+			d.Update();
 		}
-		
-		for (Edge e: edges)
-		{
-			e.Update();
-		}
+	}
+	
+	public void StartOnEnter()
+	{
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Press enter to start simluation...");
+		keyboard.nextLine();
 	}
 	
 	private void InitScenario(int _s)
@@ -67,13 +71,13 @@ public class Network extends JFrame
 	
 	public void InitSimple()
 	{
-		Node n1 = new Node(5, 50, 350); //ONode
-		Node n2 = new Node (5, 150, 350); //RNode
-		Node n3 = new Node (5, 250, 450); //QNode
-		Node n4 = new Node (5, 250, 250); //QNode
-		Node n5 = new Node (5, 350, 550); // DNode
-		Node n6 = new Node (5, 350, 150); //DNode
-		Node n7 = new Node (5, 500, 350); //SNode
+		ONode n1 = new ONode(5, 5, 50, 350); //ONode
+		RNode n2 = new RNode (5, 150, 350); //RNode
+		QNode n3 = new QNode (5, 250, 450); //QNode
+		QNode n4 = new QNode (5, 250, 250); //QNode
+		DNode n5 = new DNode (5, 350, 550); // DNode
+		DNode n6 = new DNode (5, 350, 150); //DNode
+		SNode n7 = new SNode (5, 500, 350); //SNode
 		nodes.add(n1);
 		nodes.add(n2);
 		nodes.add(n3);
@@ -106,6 +110,14 @@ public class Network extends JFrame
 	public void InitExtraRoads()
 	{
 		
+	}
+	
+	public void InitEdgeTimers()
+	{
+		for (Edge e: edges)
+		{
+			e.StartFlowTimer();
+		}
 	}
 	
 	private void MergeLists()

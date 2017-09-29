@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Edge extends Drawable
 {
@@ -7,6 +9,13 @@ public class Edge extends Drawable
 	
 	private int flowRate;
 	private String flowString;
+	
+	protected Timer flowTimer = new Timer();
+	protected TimerTask flowTask = new TimerTask() {
+				public void run() {
+					FlowVehicles();
+				}
+			};
 	
 	Edge(int _flowRate, Node _from, Node _to, int _x, int _y)
 	{
@@ -38,6 +47,11 @@ public class Edge extends Drawable
 		Y = ((y1 + y2) / 2);
 		
 		_g.drawString(flowString, X, Y);
+	}
+	
+	public void StartFlowTimer()
+	{
+		flowTimer.scheduleAtFixedRate(flowTask, flowRate, flowRate);
 	}
 	
 	private void FlowVehicles()

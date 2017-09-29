@@ -5,9 +5,13 @@ public class Main
 		Network network = new Network(1);
 		network.setTitle("MAS Traffic System");
 		
+		network.StartOnEnter();
+		network.InitEdgeTimers();
+		
 		while (network.run)
 		{
 			network.Update();
+			network.repaint();
 		}
 	}
 
