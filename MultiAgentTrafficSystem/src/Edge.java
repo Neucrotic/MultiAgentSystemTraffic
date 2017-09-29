@@ -9,6 +9,7 @@ public class Edge extends Drawable
 	
 	private int flowRate;
 	private String flowString;
+	public int trafficScore;
 	
 	protected Timer flowTimer = new Timer();
 	protected TimerTask flowTask = new TimerTask() {
@@ -23,16 +24,21 @@ public class Edge extends Drawable
 		this.to = _to;
 		this.from = _from;
 		this.flowRate = _flowRate;
+		this.trafficScore = 0;
+		
+		_from.edges.add(this);
 	}
 	
 	public void Update()
 	{
+		this.trafficScore = this.flowRate * this.to.GetCurrentVehicles();
 		
+		//FlowVehicles();
 	}
 	
 	public void Draw(Graphics _g)
 	{
-		_g.setColor(colour);
+		_g.setColor(Color.BLACK);
 		
 		int x1 = from.GetX() + (from.GetRadius() / 2);
 		int y1 = from.GetY() + (from.GetRadius() / 2);
@@ -56,10 +62,39 @@ public class Edge extends Drawable
 	
 	private void FlowVehicles()
 	{
-		if (from.GetCurrentVehicles() > 0 && to.HasCapacity())
+		if (from.edges.size() > 1)
 		{
-			from.RemoveVehicle();
-			to.AddVehicle();
+			if (from.GetBestEdge().GetTo() == to)
+			{
+				if (from.GetCurrentVehicles() > 0 && to.HasCapacity())
+				{
+					System.out.println("Sending vehicle from " + from.GetId() + " to " + to.GetId());
+					from.SendVehicle(to);
+				}
+			}
+		}
+		else
+		{
+			if (from.GetCurrentVehicles() > 0 && to.HasCapacity())
+			{
+				System.out.println("Sending vehicle from " + from.GetId() + " to " + to.GetId());
+				from.SendVehicle(to);
+			}
 		}	
+	}
+	
+	public Node GetFrom()
+	{
+		return this.from;
+	}
+	
+	public Node GetTo()
+	{
+		return this.to;
+	}
+	
+	public int GetFlowrate()
+	{
+		return this.flowRate;
 	}
 }

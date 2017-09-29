@@ -15,7 +15,7 @@ public class Network extends JFrame
 	private ArrayList<Drawable> drawables = new ArrayList<Drawable>();
 	
 	Network(int _scenario)
-	{	
+	{			
 		setBounds(100, 100, frameWidth, frameHeight);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -26,21 +26,29 @@ public class Network extends JFrame
 		MergeLists();
 	}
 	
-	public void paintComponent(Graphics _g)
-	{
-		//super.paintComponent(_g);
-		
-		for (Drawable d: drawables)
+	public void Update()
+	{		
+		for (int n = nodes.size(); n > 0; n--)
 		{
-			d.Draw(_g);
+			nodes.get(n - 1).Update();
+		}
+		
+		for (int e = edges.size(); e > 0; e--)
+		{
+			edges.get(e - 1).Update();
+		}
+		
+		for (Node n : nodes)
+		{
+			//System.out.println("Node " + n.GetId() + " contains " + n.GetCurrentVehicles() + " vehicles");
 		}
 	}
 	
-	public void Update()
+	public void paint(Graphics _g)
 	{
 		for (Drawable d: drawables)
 		{
-			d.Update();
+			d.Draw(_g);
 		}
 	}
 	
@@ -71,13 +79,13 @@ public class Network extends JFrame
 	
 	public void InitSimple()
 	{
-		ONode n1 = new ONode(5, 5, 50, 350); //ONode
-		RNode n2 = new RNode (5, 150, 350); //RNode
-		QNode n3 = new QNode (5, 250, 450); //QNode
-		QNode n4 = new QNode (5, 250, 250); //QNode
-		DNode n5 = new DNode (5, 350, 550); // DNode
-		DNode n6 = new DNode (5, 350, 150); //DNode
-		SNode n7 = new SNode (5, 500, 350); //SNode
+		ONode n1 = new ONode(5, 1, 5, 50, 350); //ONode
+		Node n2 = new Node (2, 5, 150, 350);
+		Node n3 = new Node (3, 5, 250, 450);
+		Node n4 = new Node (4, 5, 250, 250);
+		Node n5 = new Node (5, 5, 350, 550);
+		Node n6 = new Node (6, 5, 350, 150);
+		SNode n7 = new SNode (7, 5, 500, 350); //SNode
 		nodes.add(n1);
 		nodes.add(n2);
 		nodes.add(n3);
@@ -86,13 +94,13 @@ public class Network extends JFrame
 		nodes.add(n6);
 		nodes.add(n7);
 		
-		Edge e1 = new Edge(1000, n1, n2, 0, 0); // O - R
-		Edge e2 = new Edge(1000, n2, n4, 0, 0); // R - Q
-		Edge e3 = new Edge(1000, n2, n3, 0, 0); // R - Q
-		Edge e4 = new Edge(1000, n4, n6, 0, 0); // Q - D
-		Edge e5 = new Edge(1000, n3, n5, 0, 0); // Q - D
-		Edge e6 = new Edge(1000, n6, n7, 0, 0); // D - F
-		Edge e7 = new Edge(1000, n5, n7, 0, 0); // D - F
+		Edge e1 = new Edge(1000, n1, n2, 0, 0);
+		Edge e2 = new Edge(1000, n2, n4, 0, 0);
+		Edge e3 = new Edge(1000, n2, n3, 0, 0);
+		Edge e4 = new Edge(1000, n4, n6, 0, 0);
+		Edge e5 = new Edge(1000, n3, n5, 0, 0);
+		Edge e6 = new Edge(1000, n6, n7, 0, 0);
+		Edge e7 = new Edge(1000, n5, n7, 0, 0);
 		edges.add(e1);
 		edges.add(e2);
 		edges.add(e3);
@@ -118,6 +126,11 @@ public class Network extends JFrame
 		{
 			e.StartFlowTimer();
 		}
+	}
+	
+	public ArrayList<Drawable> GetDrawables()
+	{
+		return this.drawables;
 	}
 	
 	private void MergeLists()

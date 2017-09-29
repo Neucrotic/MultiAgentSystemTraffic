@@ -1,8 +1,8 @@
 public class SNode extends Node
 {
-	public SNode(int _maxVehicles, int _x, int _y)
+	public SNode(int _id, int _maxVehicles, int _x, int _y)
 	{
-		super(_maxVehicles, _x, _y);
+		super(_id, _maxVehicles, _x, _y);
 	}
 	
 	public void Update()
@@ -18,6 +18,5 @@ public class SNode extends Node
 	public void AddVehicle()
 	{
 		super.AddVehicle();
-		System.out.println("Vehicle arrived at sink!");
 	}
 }

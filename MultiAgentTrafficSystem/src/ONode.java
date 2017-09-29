@@ -2,9 +2,9 @@ public class ONode extends Node
 {
 	private int spawnRate;
 	
-	public ONode(int _spawnRate, int _maxVehicles, int _x, int _y)
+	public ONode(int _spawnRate, int _id, int _maxVehicles, int _x, int _y)
 	{
-		super(_maxVehicles, _x, _y);
+		super(_id, _maxVehicles, _x, _y);
 		this.spawnRate = _spawnRate;
 	}
 	
