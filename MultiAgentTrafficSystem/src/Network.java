@@ -28,20 +28,7 @@ public class Network extends JFrame
 	
 	public void Update()
 	{		
-		for (int n = nodes.size(); n > 0; n--)
-		{
-			nodes.get(n - 1).Update();
-		}
 		
-		for (int e = edges.size(); e > 0; e--)
-		{
-			edges.get(e - 1).Update();
-		}
-		
-		for (Node n : nodes)
-		{
-			//System.out.println("Node " + n.GetId() + " contains " + n.GetCurrentVehicles() + " vehicles");
-		}
 	}
 	
 	public void paint(Graphics _g)

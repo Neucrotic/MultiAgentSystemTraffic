@@ -12,7 +12,7 @@ public class Main
 		while (network.run)
 		{
 			network.Update();
-			network.repaint();
+			//network.repaint();
 			
 			//network.StartOnEnter();
 		}
