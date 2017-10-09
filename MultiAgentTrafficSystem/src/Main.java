@@ -2,12 +2,10 @@ public class Main
 {	
 	public static void main(String[] args)
 	{
-		Network network = new Network(1);		
-		//Renderer renderer = new Renderer(network.GetDrawables());
+		Network network = new Network();
 		network.setTitle("MAS Traffic System");
 		
 		network.StartOnEnter();
-		network.InitEdgeTimers();
 		
 		while (network.run)
 		{

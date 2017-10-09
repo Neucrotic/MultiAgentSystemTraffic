@@ -1,22 +1,12 @@
-public class SNode extends Node
+public class SNode extends OpenNode
 {
-	public SNode(int _id, int _maxVehicles, int _x, int _y)
+	public SNode(int _id, Intersection _inter, int _x, int _y)
 	{
-		super(_id, _maxVehicles, _x, _y);
+		super(_id, _inter, _x, _y);
 	}
 	
 	public void Update()
 	{
-		if (currentVehicles > 0)
-		{
-			System.out.println(currentVehicles + " arrived at the sink");
-			currentVehicles = 0;
-		}
-	}
-	
-	//overriding
-	public void AddVehicle()
-	{
-		super.AddVehicle();
+		System.out.println(currentVehicles + " have made it to the sink");
 	}
 }

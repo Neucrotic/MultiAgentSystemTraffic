@@ -9,39 +9,50 @@ public class Network extends JFrame
 	
 	private int frameWidth = 1000;
 	private int frameHeight = 700;
+	private Scanner keyboard = new Scanner(System.in);
 	
-	private ArrayList<Node> nodes = new ArrayList<Node>();
-	private ArrayList<Edge> edges = new ArrayList<Edge>();
+	private int scenario;
+	private ArrayList<Intersection> inters = new ArrayList<Intersection>();
+	private ArrayList<Link> links = new ArrayList<Link>();
+	
+	private ArrayList<ONode> originNodes = new ArrayList<ONode>();
+	private SNode sink;
+	
 	private ArrayList<Drawable> drawables = new ArrayList<Drawable>();
 	
-	Network(int _scenario)
+	Network()
 	{			
 		setBounds(100, 100, frameWidth, frameHeight);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
-		InitScenario(_scenario);
+		System.out.println("Which scenario would you like to run?");
+		this.scenario = keyboard.nextInt();
+		
+		InitScenario(this.scenario);
 		
 		MergeLists();
 	}
 	
 	public void Update()
 	{		
-		for (int n = nodes.size(); n > 0; n--)
+		for (ONode o: originNodes)
 		{
-			nodes.get(n - 1).Update();
+			o.Update();
 		}
 		
-		for (int e = edges.size(); e > 0; e--)
+		for (Intersection i: inters)
 		{
-			edges.get(e - 1).Update();
+			i.Update();
 		}
 		
-		for (Node n : nodes)
+		for (Link l: links)
 		{
-			//System.out.println("Node " + n.GetId() + " contains " + n.GetCurrentVehicles() + " vehicles");
+			l.Update();
 		}
+		
+		sink.Update();
 	}
 	
 	public void paint(Graphics _g)
@@ -54,7 +65,6 @@ public class Network extends JFrame
 	
 	public void StartOnEnter()
 	{
-		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Press enter to start simluation...");
 		keyboard.nextLine();
 	}
@@ -79,35 +89,62 @@ public class Network extends JFrame
 	
 	public void InitSimple()
 	{
-		ONode n1 = new ONode(5, 1, 5, 50, 350); //ONode
-		Node n2 = new Node (2, 5, 150, 350);
-		Node n3 = new Node (3, 5, 250, 450);
-		Node n4 = new Node (4, 5, 250, 250);
-		Node n5 = new Node (5, 5, 350, 550);
-		Node n6 = new Node (6, 5, 350, 150);
-		SNode n7 = new SNode (7, 5, 500, 350); //SNode
-		nodes.add(n1);
-		nodes.add(n2);
-		nodes.add(n3);
-		nodes.add(n4);
-		nodes.add(n5);
-		nodes.add(n6);
-		nodes.add(n7);
+		int originSpawnRate;
+		int firstInterLeft;
+		int distAB;
+		int distAC;
+		int distBD;
+		int distCD;
 		
-		Edge e1 = new Edge(1000, n1, n2, 0, 0);
-		Edge e2 = new Edge(1000, n2, n4, 0, 0);
-		Edge e3 = new Edge(1000, n2, n3, 0, 0);
-		Edge e4 = new Edge(1000, n4, n6, 0, 0);
-		Edge e5 = new Edge(1000, n3, n5, 0, 0);
-		Edge e6 = new Edge(1000, n6, n7, 0, 0);
-		Edge e7 = new Edge(1000, n5, n7, 0, 0);
-		edges.add(e1);
-		edges.add(e2);
-		edges.add(e3);
-		edges.add(e4);
-		edges.add(e5);
-		edges.add(e6);
-		edges.add(e7);
+		ArrayList<Link> l1 = new ArrayList<Link>();
+		ArrayList<Link> l2 = new ArrayList<Link>();
+		ArrayList<Link> l3 = new ArrayList<Link>();
+		ArrayList<Link> l4 = new ArrayList<Link>();
+		
+		System.out.println("What is the origins spawn rate?");
+		originSpawnRate = keyboard.nextInt();
+		System.out.println("Which percentage of cars will go left at the first intersection?");
+		firstInterLeft = keyboard.nextInt();
+		
+		System.out.println("What is the distance between intersections A and B?");
+		distAB = keyboard.nextInt();
+		System.out.println("What is the distance between intersections A and C?");
+		distAC = keyboard.nextInt();
+		System.out.println("What is the distance between intersections B and D?");
+		distBD = keyboard.nextInt();
+		System.out.println("What is the distance between intersections C and D?");
+		distCD = keyboard.nextInt();
+		
+		Link AB = new Link(1, distAB, 0, 0);
+		Link AC = new Link(2, distAC, 0, 0);
+		Link BD = new Link(3, distBD, 0, 0);
+		Link CD = new Link(4, distCD, 0, 0);
+		
+		l1.add(AB);
+		l1.add(AC);
+		Intersection i1 = new Intersection(1, true, firstInterLeft, l1, 0, 0);
+		
+		l2.add(AB);
+		l2.add(BD);
+		Intersection i2 = new Intersection(2, false, 0, l2, 0, 0);
+		
+		l3.add(AC);
+		l3.add(CD);
+		Intersection i3 = new Intersection(3, false, 0, l3, 0, 0);
+		
+		l4.add(BD);
+		l4.add(CD);
+		Intersection i4 = new Intersection(4, false, 0, l4, 0, 0);
+		
+		inters.add(i1);
+		inters.add(i2);
+		inters.add(i3);
+		inters.add(i4);
+		
+		ONode o = new ONode(originSpawnRate, 1, i1, 0, 0);
+		this.originNodes.add(o);
+			
+		this.sink = new SNode(1, i4, 0, 0);
 	}
 	
 	public void InitThreeStart()
@@ -120,14 +157,6 @@ public class Network extends JFrame
 		
 	}
 	
-	public void InitEdgeTimers()
-	{
-		for (Edge e: edges)
-		{
-			e.StartFlowTimer();
-		}
-	}
-	
 	public ArrayList<Drawable> GetDrawables()
 	{
 		return this.drawables;
@@ -135,14 +164,37 @@ public class Network extends JFrame
 	
 	private void MergeLists()
 	{
-		for (Node n: nodes)
-		{
-			drawables.add(n);
-		}
 		
-		for (Edge e: edges)
+	}
+	
+	private void VehicleOriginToInter(ONode _origin, Intersection _inter)
+	{
+		if (_origin.GetCurrentVehicles() > 0 && _inter.GetRNode().HasCapacity())
 		{
-			drawables.add(e);
+			_origin.RemoveVehicle();
+			_inter.GetRNode().AddVehicle();
+		}
+	}
+	
+	private void VehicleInterToLink(Intersection _inter, Link _link)
+	{
+		
+	}
+	
+	private void VehicleLinkToInter(Link _link, Intersection _inter)
+	{
+		
+	}
+	
+	private void VehicleInterToSink(Intersection _inter)
+	{
+		if (_inter.GetQNode() != null)
+		{
+			if (_inter.GetQNode().GetCurrentVehicles() > 0)
+			{
+				_inter.GetQNode().RemoveVehicle();
+				this.sink.AddVehicle();
+			}
 		}
 	}
 }

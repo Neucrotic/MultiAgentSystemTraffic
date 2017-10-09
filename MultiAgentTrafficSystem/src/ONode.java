@@ -1,22 +1,20 @@
-public class ONode extends Node
+public class ONode extends OpenNode
 {
 	private int spawnRate;
 	
-	public ONode(int _spawnRate, int _id, int _maxVehicles, int _x, int _y)
+	public ONode(int _spawnRate, int _id, Intersection _inter, int _x, int _y)
 	{
-		super(_id, _maxVehicles, _x, _y);
+		super(_id, _inter, _x, _y);
 		this.spawnRate = _spawnRate;
+		this.inter = _inter;
 	}
 	
 	public void Update()
 	{
 		for (int i = 0; i < spawnRate; i++)
 		{
-			if (HasCapacity())
-			{
-				AddVehicle();
-				System.out.println("Vehicle Spawned");
-			}
+			AddVehicle();
+			System.out.println("Vehicle Spawned");
 		}
 	}
 }
