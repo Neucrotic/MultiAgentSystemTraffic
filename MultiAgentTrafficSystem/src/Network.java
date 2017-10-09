@@ -190,9 +190,9 @@ public class Network extends JFrame
 	{
 		if (_inter.GetRightQNode() != null)
 		{
-			if (_inter.GetQNode().GetCurrentVehicles() > 0)
+			if (_inter.GetRightQNode().GetCurrentVehicles() > 0)
 			{
-				_inter.GetQNode().RemoveVehicle();
+				_inter.GetRightQNode().RemoveVehicle();
 				this.sink.AddVehicle();
 			}
 		}
