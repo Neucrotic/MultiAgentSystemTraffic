@@ -188,7 +188,7 @@ public class Network extends JFrame
 	
 	private void VehicleInterToSink(Intersection _inter)
 	{
-		if (_inter.GetQNode() != null)
+		if (_inter.GetRightQNode() != null)
 		{
 			if (_inter.GetQNode().GetCurrentVehicles() > 0)
 			{
