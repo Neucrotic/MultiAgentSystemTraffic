@@ -35,10 +35,24 @@ public class Intersection extends Drawable
 	public void Update()
 	{
 		int leftCount = (this.leftPercentage / 100) * this.rNode.GetCurrentVehicles();
-		int rightCount = this.rNode.GetCurrentVehicles() - leftCount;
 		
-		SendManyVehicles(this.rNode, this.qNodeLeft, leftCount);
-		SendManyVehicles(this.rNode, this.qNodeRight, rightCount);
+		if (duel)
+		{
+			int rightCount = this.rNode.GetCurrentVehicles() - leftCount;
+			
+			//Update RNode
+			SendManyVehicles(this.rNode, this.qNodeLeft, leftCount);
+			SendManyVehicles(this.rNode, this.qNodeRight, rightCount);
+			
+			//Update QNode(s)
+			
+		}
+		else
+		{
+			SendManyVehicles(this.rNode, this.qNodeLeft, leftCount);
+		}
+		
+		//Check all links, if link points to me then try receive a vehicle
 	}
 	
 	private void InitDuel()
