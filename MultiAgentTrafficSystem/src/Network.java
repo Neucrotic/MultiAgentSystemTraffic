@@ -42,17 +42,17 @@ public class Network extends JFrame
 			o.Update();
 		}
 		
-		for (Intersection i: inters)
-		{
-			i.Update();
-		}
+		sink.Update();
 		
 		for (Link l: links)
 		{
 			l.Update();
 		}
 		
-		sink.Update();
+		for (Intersection i: inters)
+		{
+			i.Update();
+		}
 	}
 	
 	public void paint(Graphics _g)
@@ -96,11 +96,7 @@ public class Network extends JFrame
 		int distBD;
 		int distCD;
 		
-		ArrayList<Link> l1 = new ArrayList<Link>();
-		ArrayList<Link> l2 = new ArrayList<Link>();
-		ArrayList<Link> l3 = new ArrayList<Link>();
-		ArrayList<Link> l4 = new ArrayList<Link>();
-		
+		//Ask for user initialization
 		System.out.println("What is the origins spawn rate?");
 		originSpawnRate = keyboard.nextInt();
 		System.out.println("Which percentage of cars will go left at the first intersection?");
@@ -115,32 +111,29 @@ public class Network extends JFrame
 		System.out.println("What is the distance between intersections C and D?");
 		distCD = keyboard.nextInt();
 		
-		Link AB = new Link(1, distAB, 0, 0);
-		Link AC = new Link(2, distAC, 0, 0);
-		Link BD = new Link(3, distBD, 0, 0);
-		Link CD = new Link(4, distCD, 0, 0);
+		//Create Intersections and Links
+		Intersection A = new Intersection(1, true, firstInterLeft, 1, 0, 0);
+		Intersection B = new Intersection(2, false, 0, 1, 0, 0);
+		Intersection C = new Intersection(3, false, 0, 1, 0, 0);
+		Intersection D = new Intersection(4, false, 0, 1, 0, 0);
 		
-		l1.add(AB);
-		l1.add(AC);
-		Intersection i1 = new Intersection(1, true, firstInterLeft, l1, 0, 0);
+		Link AB = new Link(1, A, B, distAB, 1, 0, 0);
+		Link AC = new Link(2, A, C, distAC, 1, 0, 0);
+		Link BD = new Link(3, B, D, distBD, 1, 0, 0);
+		Link CD = new Link(4, C, D, distCD, 1, 0, 0);
 		
-		l2.add(AB);
-		l2.add(BD);
-		Intersection i2 = new Intersection(2, false, 0, l2, 0, 0);
+		//Attach Links to Intersections
+		A.SetLinkLeft(AB);
+		A.SetLinkRight(AC);
+		B.SetLinkLeft(BD);
+		C.SetLinkLeft(CD);
 		
-		l3.add(AC);
-		l3.add(CD);
-		Intersection i3 = new Intersection(3, false, 0, l3, 0, 0);
+		inters.add(A);
+		inters.add(B);
+		inters.add(C);
+		inters.add(D);
 		
-		l4.add(BD);
-		l4.add(CD);
-		Intersection i4 = new Intersection(4, false, 0, l4, 0, 0);
-		
-		inters.add(i1);
-		inters.add(i2);
-		inters.add(i3);
-		inters.add(i4);
-		
+		//Initialise Origin and Sink Nodes
 		ONode o = new ONode(originSpawnRate, 1, i1, 0, 0);
 		this.originNodes.add(o);
 			

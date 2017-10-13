@@ -2,11 +2,20 @@ import java.util.ArrayList;
 
 public class Link extends Drawable
 {
+	public boolean isLeftLink;
+	private Intersection to;
+	private Intersection from;
 	private ArrayList<DNode> dNodes = new ArrayList<DNode>();
+	private int flowRate;
 	
-	Link(int _id, int _dist, int _x, int _y)
+	Link(int _id, Intersection _from, Intersection _to, int _dist, int _flowrate, int _x, int _y)
 	{
 		super(_x, _y);
+		
+		this.to = _to;
+		this.from = _from;
+		this.flowRate = _flowrate;
+		this.isLeftLink = this.from.IsLinkLeft(this);
 		
 		if (_dist != 0)
 		{
@@ -26,13 +35,53 @@ public class Link extends Drawable
 	
 	public void Update()
 	{
-		for (int i = 0; i < dNodes.size() - 1; i++) //update DNodes, apart from last
+		//push to TO inter
+		if (dNodes.get(dNodes.size()).GetCurrentVehicles() > 0 && to.GetRNode().HasCapacity())
 		{
-			if (dNodes.get(i).GetCurrentVehicles() > 0 && dNodes.get(i + 1).HasCapacity())
+			dNodes.get(dNodes.size()).RemoveVehicle();
+			to.GetRNode().AddVehicle();
+		}
+		
+		//update DNodes backwards, apart from last
+		for (int i = dNodes.size() - 1; i >= 0; i--)
+		{
+			if (dNodes.get(i + 1) != null)
 			{
-				//dNodes.get(i)
+				if (dNodes.get(i).GetCurrentVehicles() > 0 && dNodes.get(i + 1).HasCapacity())
+				{
+					dNodes.get(i).RemoveVehicle();
+					dNodes.get(i + 1).AddVehicle();
+				}
 			}
 		}
+		
+		//pull a vehicle from FROM inter
+		if (this.isLeftLink)
+		{
+			if (this.from.GetLeftQNode().GetCurrentVehicles() > 0 && this.dNodes.get(0).HasCapacity())
+			{
+				this.from.GetLeftQNode().RemoveVehicle();
+				this.dNodes.get(0).AddVehicle();
+			}
+		}
+		else
+		{
+			if (this.from.GetRightQNode().GetCurrentVehicles() > 0 && this.dNodes.get(0).HasCapacity())
+			{
+				this.from.GetRightQNode().RemoveVehicle();
+				this.dNodes.get(0).AddVehicle();
+			}
+		}
+	}
+	
+	public Intersection To()
+	{
+		return this.to;
+	}
+	
+	public Intersection From()
+	{
+		return this.from;
 	}
 	
 	public void AddVehicle()

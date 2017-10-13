@@ -17,21 +17,6 @@ public class Node extends Drawable
 		this.currentVehicles = 0;
 	}
 	
-	public void Update()
-	{		
-		
-	}
-	
-	public void Draw(Graphics _g)
-	{
-		_g.setColor(colour);
-		
-		_g.fillOval(X, Y, nodeRadius, nodeRadius);
-		
-		//drawString = drawString.valueOf(currentVehicles) + "/" + drawString.valueOf(maxVehicles);
-		_g.drawString(drawString, X + ((nodeRadius / 2) - 10), Y + (nodeRadius + 10));
-	}
-	
 	public void AddVehicle()
 	{
 		this.currentVehicles++;
