@@ -40,9 +40,16 @@ public class Network extends JFrame
 		for (ONode o: originNodes)
 		{
 			o.Update();
+			
+			for (int i = 0; i < o.GetInter().GetFlowrate(); i++)
+			{
+				VehicleOriginToInter(o, o.GetInter());
+			}
 		}
 		
 		sink.Update();
+		
+		VehicleInterToSink(sink.GetInter());
 		
 		for (Link l: links)
 		{
@@ -112,15 +119,15 @@ public class Network extends JFrame
 		distCD = keyboard.nextInt();
 		
 		//Create Intersections and Links
-		Intersection A = new Intersection(1, true, firstInterLeft, 1, 0, 0);
-		Intersection B = new Intersection(2, false, 0, 1, 0, 0);
-		Intersection C = new Intersection(3, false, 0, 1, 0, 0);
-		Intersection D = new Intersection(4, false, 0, 1, 0, 0);
+		Intersection A = new Intersection(1, true, firstInterLeft, 5, 0, 0);
+		Intersection B = new Intersection(2, false, 0, 5, 0, 0);
+		Intersection C = new Intersection(3, false, 0, 5, 0, 0);
+		Intersection D = new Intersection(4, false, 0, 5, 0, 0);
 		
-		Link AB = new Link(1, A, B, distAB, 1, 0, 0);
-		Link AC = new Link(2, A, C, distAC, 1, 0, 0);
-		Link BD = new Link(3, B, D, distBD, 1, 0, 0);
-		Link CD = new Link(4, C, D, distCD, 1, 0, 0);
+		Link AB = new Link(1, A, B, distAB, 5, 0, 0);
+		Link AC = new Link(2, A, C, distAC, 5, 0, 0);
+		Link BD = new Link(3, B, D, distBD, 5, 0, 0);
+		Link CD = new Link(4, C, D, distCD, 5, 0, 0);
 		
 		//Attach Links to Intersections
 		A.SetLinkLeft(AB);
@@ -128,16 +135,25 @@ public class Network extends JFrame
 		B.SetLinkLeft(BD);
 		C.SetLinkLeft(CD);
 		
+		AB.isLeftLink = AB.From().IsLinkLeft(AB);
+		AC.isLeftLink = AC.From().IsLinkLeft(AC);
+		BD.isLeftLink = BD.From().IsLinkLeft(BD);
+		CD.isLeftLink = CD.From().IsLinkLeft(CD);
+		
 		inters.add(A);
 		inters.add(B);
 		inters.add(C);
 		inters.add(D);
+		links.add(AB);
+		links.add(AC);
+		links.add(BD);
+		links.add(CD);
 		
 		//Initialise Origin and Sink Nodes
-		ONode o = new ONode(originSpawnRate, 1, i1, 0, 0);
+		ONode o = new ONode(originSpawnRate, 1, A, 0, 0);
 		this.originNodes.add(o);
 			
-		this.sink = new SNode(1, i4, 0, 0);
+		this.sink = new SNode(1, D, 0, 0);
 	}
 	
 	public void InitThreeStart()
@@ -181,11 +197,11 @@ public class Network extends JFrame
 	
 	private void VehicleInterToSink(Intersection _inter)
 	{
-		if (_inter.GetRightQNode() != null)
+		if (_inter.GetLeftQNode() != null)
 		{
-			if (_inter.GetRightQNode().GetCurrentVehicles() > 0)
+			if (_inter.GetLeftQNode().GetCurrentVehicles() > 0)
 			{
-				_inter.GetRightQNode().RemoveVehicle();
+				_inter.GetLeftQNode().RemoveVehicle();
 				this.sink.AddVehicle();
 			}
 		}

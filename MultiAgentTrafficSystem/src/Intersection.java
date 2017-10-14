@@ -41,12 +41,44 @@ public class Intersection extends Drawable
 		{
 			int rightCount = this.rNode.GetCurrentVehicles() - leftCount;
 			
-			SendManyVehicles(this.rNode, this.qNodeLeft, leftCount);
-			SendManyVehicles(this.rNode, this.qNodeRight, rightCount);
+			for (int i = 0; i < leftCount && i < this.flowRate; i++)
+			{
+				if (this.rNode.GetCurrentVehicles() > 0 && this.qNodeLeft.HasCapacity())
+				{
+					this.rNode.RemoveVehicle();
+					this.qNodeLeft.AddVehicle();
+				}
+			}
+			for (int l = 0; l < rightCount && l < this.flowRate; l++)
+			{
+				if (this.rNode.GetCurrentVehicles() > 0 && this.qNodeRight.HasCapacity())
+				{
+					this.rNode.RemoveVehicle();
+					this.qNodeRight.AddVehicle();
+				}
+			}
+			
+			//Print data to console
+			System.out.println("Intersection " + this.id + " contains:");
+			System.out.println("RNode: " + this.rNode.GetCurrentVehicles() + " vehicles");
+			System.out.println("Left QNode: " + this.qNodeLeft.GetCurrentVehicles() + " vehicles");
+			System.out.println("Right QNode: " + this.qNodeRight.GetCurrentVehicles() + " vehicles");
 		}
 		else
 		{
-			SendManyVehicles(this.rNode, this.qNodeLeft, leftCount);
+			for (int i = 0; i < leftCount && i < this.flowRate; i++)
+			{
+				if (this.rNode.GetCurrentVehicles() > 0 && this.qNodeLeft.HasCapacity())
+				{
+					this.rNode.RemoveVehicle();
+					this.qNodeLeft.AddVehicle();
+				}
+			}
+			
+			//Print data to console
+			System.out.println("Intersection " + this.id + " contains:");
+			System.out.println("RNode: " + this.rNode.GetCurrentVehicles() + " vehicles");
+			System.out.println("Left QNode: " + this.qNodeLeft.GetCurrentVehicles() + " vehicles");
 		}
 	}
 	
@@ -121,5 +153,10 @@ public class Intersection extends Drawable
 		}
 		
 		return false;
+	}
+	
+	public int GetFlowrate()
+	{
+		return this.flowRate;
 	}
 }

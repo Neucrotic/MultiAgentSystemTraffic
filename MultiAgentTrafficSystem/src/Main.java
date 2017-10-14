@@ -12,7 +12,7 @@ public class Main
 			network.Update();
 			//network.repaint();
 			
-			//network.StartOnEnter();
+			network.StartOnEnter();
 		}
 	}
 

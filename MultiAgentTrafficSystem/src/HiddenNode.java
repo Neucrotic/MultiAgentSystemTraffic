@@ -5,6 +5,7 @@ public class HiddenNode extends Node
 	public HiddenNode(int _maxVehicles, int _id, int _x, int _y)
 	{
 		super(_id, _x, _y);
+		this.maxVehicles = _maxVehicles;
 	}
 	
 	public boolean HasCapacity()

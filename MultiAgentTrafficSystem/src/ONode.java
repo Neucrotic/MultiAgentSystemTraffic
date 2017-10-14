@@ -16,5 +16,7 @@ public class ONode extends OpenNode
 			AddVehicle();
 			System.out.println("Vehicle Spawned");
 		}
+		
+		System.out.println("Origin " + this.id + " contains " + this.currentVehicles + " vehicles");
 	}
 }
